@@ -1,63 +1,44 @@
-import { useState, useEffect } from "react";
+import { useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
-
+import { CartContext } from "../context/CartContext";
 const Cart = () => {
   const navigate = useNavigate();
-  const [cartItems, setCartItems] = useState([]);
+  const { cartItems, addToCart, removeFromCart, setCartItems } =
+    useContext(CartContext);
 
-  // Load cart items from localStorage
-  useEffect(() => {
-    const storedCart = JSON.parse(localStorage.getItem("cart")) || [];
-    setCartItems(storedCart);
-  }, []);
-
-  // Update the cart in localStorage and state
-  const updateCart = (updatedCart) => {
-    localStorage.setItem("cart", JSON.stringify(updatedCart));
-    setCartItems(updatedCart);
-  };
-
-  // Handle increase/decrease quantity
   const changeQuantity = (id, operation) => {
-    const updatedCart = cartItems
-      .map((item) => {
-        if (item.id === id) {
-          const updatedQuantity =
-            operation === "increase" ? item.quantity + 1 : item.quantity - 1;
+    const item = cartItems.find((i) => i.id === id);
+    if (!item) return;
 
-          return { ...item, quantity: updatedQuantity };
-        }
-        return item;
-      })
-      .filter((item) => item.quantity > 0); // Remove items with zero quantity
-
-    updateCart(updatedCart);
-  };
-
-  // Handle removing item
-  const removeItem = (id) => {
-    const updatedCart = cartItems.filter((item) => item.id !== id);
-    updateCart(updatedCart);
-  };
-
-  // Handle checkout
-  const handleCheckout = () => {
-    const user = JSON.parse(localStorage.getItem("currentUser"));
-    if (!user) {
-      // If the user isn't logged in, redirect to login
-      navigate("/login");
+    if (operation === "increase") {
+      addToCart(item);
     } else {
-      // Proceed with checkout
-      navigate("/checkout");
+      if (item.quantity <= 1) {
+        removeFromCart(id);
+      } else {
+        const updatedCart = cartItems.map((i) =>
+          i.id === id ? { ...i, quantity: i.quantity - 1 } : i
+        );
+        localStorage.setItem("cart", JSON.stringify(updatedCart));
+        setCartItems(updatedCart);
+      }
     }
   };
 
-  // Calculate total price
   const calculateTotal = () => {
     return cartItems.reduce(
       (total, item) => total + item.price * item.quantity,
       0
     );
+  };
+
+  const handleCheckout = () => {
+    const user = JSON.parse(localStorage.getItem("currentUser"));
+    if (!user) {
+      navigate("/login");
+    } else {
+      navigate("/checkout");
+    }
   };
 
   return (
@@ -74,7 +55,6 @@ const Cart = () => {
           </div>
         ) : (
           <div>
-            {/* Cart Items */}
             <div className="space-y-4">
               {cartItems.map((item) => (
                 <div
@@ -111,7 +91,7 @@ const Cart = () => {
                       +
                     </button>
                     <button
-                      onClick={() => removeItem(item.id)}
+                      onClick={() => removeFromCart(item.id)}
                       className="text-red-600 hover:text-red-800"
                     >
                       Remove
@@ -121,7 +101,6 @@ const Cart = () => {
               ))}
             </div>
 
-            {/* Cart Summary */}
             <div className="mt-6 border-t pt-4 flex justify-between items-center">
               <h3 className="text-xl font-semibold text-gray-800">
                 Total: Rs.{calculateTotal()}
