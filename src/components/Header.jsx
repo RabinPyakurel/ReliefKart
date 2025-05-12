@@ -1,6 +1,10 @@
+import { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { CartContext } from "../context/CartContext";
 
 const Header = () => {
+  const { cartItems } = useContext(CartContext);
+  const cartCount = cartItems.reduce((sum, item) => sum + item.quantity, 0);
   return (
     <header className="bg-white shadow-md py-4 px-6 flex items-center justify-between">
       {/* Logo */}
@@ -37,10 +41,15 @@ const Header = () => {
           </button>
         </div>
 
-        <Link to="/cart">
+        <Link to="/cart" className="relative">
           <span className="material-symbols-outlined cursor-pointer text-gray-700 hover:text-blue-600">
             shopping_cart
           </span>
+          {cartCount > 0 && (
+            <span className="absolute -top-1/4  -right-1 bg-red-600 text-white text-xs rounded-full h-3 w-3 flex items-center justify-center">
+              {cartCount}
+            </span>
+          )}
         </Link>
 
         <Link to="/account">

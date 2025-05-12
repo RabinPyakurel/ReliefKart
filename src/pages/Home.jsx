@@ -1,28 +1,32 @@
-import React from "react";
-import Hero from "../components/Hero";
-import CategoryGrid from "../components/CategoryGrid";
-import ProductCard from "../components/ProductCard";
-
+import { CategoryGrid, Hero, ProductCard } from "../components";
+import frist_aid from "../assets/first-aid-kit.jpg";
+import earthquake_kit from "../assets/portable-earthquake-kit.jpg";
+import solar_torch from "../assets/solar-torch.jpg";
+import water_purifier from "../assets/water-purifier.jpg";
 const sampleProducts = [
   {
+    id: 1,
     name: "Portable Earthquake Kit",
     price: "1500",
-    image: "https://via.placeholder.com/150",
+    image: frist_aid,
   },
   {
+    id: 2,
     name: "Solar Powered Torch",
     price: "800",
-    image: "https://via.placeholder.com/150",
+    image: earthquake_kit,
   },
   {
+    id: 3,
     name: "Water Purifier Bottle",
     price: "1200",
-    image: "https://via.placeholder.com/150",
+    image: solar_torch,
   },
   {
+    id: 4,
     name: "Basic First Aid Kit",
     price: "600",
-    image: "https://via.placeholder.com/150",
+    image: water_purifier,
   },
 ];
 
