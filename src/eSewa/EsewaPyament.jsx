@@ -14,8 +14,8 @@ const EsewaPayment = () => {
     product_service_charge: "0",
     product_delivery_charge: "0",
     product_code: "EPAYTEST",
-    success_url: "http://localhost:5173/success",
-    failure_url: "http://localhost:5173/failure",
+    success_url: "https://r8t94v-5173.csb.app/success",
+    failure_url: "https://r8t94v-5173.csb.app/failure",
     signed_field_names: "total_amount,transaction_uuid,product_code",
     signature: "",
     secret: "8gBm/:&EnhH.1/q",
@@ -70,19 +70,9 @@ const EsewaPayment = () => {
           name="amount"
           autoComplete="off"
           value={formData.amount}
-          // onChange={({ target }) =>
-          //   setformData({
-          //     ...formData,
-          //     amount: target.value,
-          //     total_amount: target.value,
-          //   })
-          // }
-          // required
           className="w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
         />
       </div>
-
-      {/* Hidden fields remain untouched */}
       <input
         type="hidden"
         id="tax_amount"
