@@ -33,12 +33,12 @@ const Cart = () => {
   };
 
   const handleCheckout = () => {
-    const user = JSON.parse(localStorage.getItem("currentUser"));
-    if (!user) {
-      navigate("/login");
-    } else {
-      navigate("/checkout");
-    }
+    // const user = JSON.parse(localStorage.getItem("currentUser"));
+    // if (!user) {
+    //   navigate("/login");
+    // } else {
+    navigate("/checkout");
+    // }
   };
 
   return (

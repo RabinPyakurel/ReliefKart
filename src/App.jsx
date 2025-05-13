@@ -11,6 +11,7 @@ import {
   Register,
   Products,
   Contact,
+  Checkout,
 } from "./pages";
 import { EsewaPayement, Failure, Success } from "./eSewa";
 
@@ -25,6 +26,7 @@ const App = () => {
           <Route path="/contact" element={<Contact />} />
           <Route path="/cart" element={<Cart />} />
           <Route path="/account" element={<Account />} />
+          <Route path="/checkout" element={<Checkout />} />
         </Route>
         <Route path="/esewa" element={<EsewaPayement />} />
         <Route path="/success" element={<Success />} />
