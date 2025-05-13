@@ -8,25 +8,25 @@ const sampleProducts = [
     id: 1,
     name: "Portable Earthquake Kit",
     price: "1500",
-    image: frist_aid,
+    image: earthquake_kit,
   },
   {
     id: 2,
     name: "Solar Powered Torch",
     price: "800",
-    image: earthquake_kit,
+    image: solar_torch,
   },
   {
     id: 3,
     name: "Water Purifier Bottle",
     price: "1200",
-    image: solar_torch,
+    image: water_purifier,
   },
   {
     id: 4,
     name: "Basic First Aid Kit",
     price: "600",
-    image: water_purifier,
+    image: frist_aid,
   },
 ];
 
