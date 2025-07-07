@@ -23,5 +23,6 @@ public class Product {
     private String category;
     private boolean available;
     private int quantity;
+    private String image;
 }
 
