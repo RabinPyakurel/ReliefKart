@@ -16,21 +16,40 @@ const ProductDetail = () => {
   if (!product) return <p>Loading...</p>;
 
   return (
-    <div className="p-6">
-      <h1 className="text-3xl font-bold mb-4">{product.name}</h1>
-      <p className="text-lg">Price: Nrs. {product.price}</p>
-      <p className="text-gray-600 mt-2">
-        {product.description || "No description yet"}
-      </p>
-      <p className="mt-2">Category: {product.category}</p>
-      <p className="mt-2">
-        Availability:{" "}
-        {product.available ? (
-          <span className="text-green-600">Available</span>
-        ) : (
-          <span className="text-red-600">Out of stock</span>
-        )}
-      </p>
+    <div className="p-6 flex flex-col md:flex-row items-start gap-10">
+      {/* Left: Image */}
+      <div className="md:w-1/2 w-full">
+        <div className="aspect-square bg-gray-100 flex items-center justify-center rounded-lg overflow-hidden">
+          {/* Optional: placeholder if no image */}
+          <img
+            src={product.image} // replace with product.image if available
+            alt={product.name}
+            className="object-cover w-full h-full"
+          />
+        </div>
+      </div>
+
+      {/* Right: Details */}
+      <div className="md:w-1/2 w-full">
+        <h1 className="text-3xl font-bold mb-4">{product.name}</h1>
+        <p className="text-lg font-semibold mb-2">
+          Price: Nrs. {product.price}
+        </p>
+        <p className="text-gray-700 mb-2">
+          {product.description || "No description yet"}
+        </p>
+        <p className="mb-2">
+          Category: <span className="text-blue-600">{product.category}</span>
+        </p>
+        <p>
+          Availability:{" "}
+          {product.available ? (
+            <span className="text-green-600 font-semibold">Available</span>
+          ) : (
+            <span className="text-red-600 font-semibold">Out of stock</span>
+          )}
+        </p>
+      </div>
     </div>
   );
 };
