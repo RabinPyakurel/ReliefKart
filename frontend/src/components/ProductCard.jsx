@@ -22,7 +22,7 @@ const ProductCard = ({ product }) => {
     <>
       <div className="bg-white shadow-md rounded-lg overflow-hidden hover:shadow-lg transition flex flex-col">
         <img
-          src={product.image}
+          src=""
           alt={product.name}
           className="w-full h-40 object-contain bg-gray-100 p-4"
         />

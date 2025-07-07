@@ -12,6 +12,7 @@ import {
   Products,
   Contact,
   Checkout,
+  ProdcutDetail,
 } from "./pages";
 import { EsewaPayement, Failure, Success } from "./eSewa";
 import Khalti from "./khalti/Khalti";
@@ -24,6 +25,7 @@ const App = () => {
         <Route element={<Layout />}>
           <Route path="/" element={<Home />} />
           <Route path="/products" element={<Products />} />
+          <Route path="/product/:id" element={<ProdcutDetail />} />
           <Route path="/about" element={<About />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/cart" element={<Cart />} />
