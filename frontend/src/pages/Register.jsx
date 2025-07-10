@@ -55,9 +55,9 @@ const Register = () => {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            full_name: fullName,
+            fullName,
             email,
-            phone_number: phone,
+            phoneNumber: phone,
             password,
           }),
         });
@@ -78,6 +78,11 @@ const Register = () => {
           setErrors((prev) => ({
             ...prev,
             email: "This email is already in use.",
+          }));
+        } else if (err.message.includes("Phone number already")) {
+          setErrors((prev) => ({
+            ...prev,
+            phone: "Phone number is already in use.",
           }));
         } else {
           setToast({ message: err.message, type: "error" });

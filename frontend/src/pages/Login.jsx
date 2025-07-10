@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Toast } from "../components";
 
-
 const Login = () => {
   const [formData, setFormData] = useState({ email: "", password: "" });
   const [errors, setErrors] = useState({});
@@ -29,28 +28,47 @@ const Login = () => {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (validate()) {
-      const users = JSON.parse(localStorage.getItem("users")) || [];
-
-      // Check if the user exists and the password matches
-      const user = users.find((user) => user.email === formData.email);
-      if (!user || user.password !== formData.password) {
-        setToast({
-          message: "Invalid credentials. Please try again.",
-          type: "error",
+      try {
+        const response = await fetch("http://localhost:8080/user/login", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            email: formData.email,
+            password: formData.password,
+          }),
         });
-        return;
-      }
 
-      // If login is successful, redirect to homepage
-      setToast({ message: "Login successful!", type: "success" });
-      setTimeout(() => {
-        setToast({ message: "", type: "" });
-        navigate("/"); // Redirect to homepage
-      }, 2000);
+        if (!response.ok) {
+          const errorText = await response.text();
+          throw new Error(errorText);
+        }
+
+        const data = await response.json();
+
+        setToast({ message: "Login successful!", type: "success" });
+        setTimeout(() => {
+          setToast({ message: "", type: "" });
+          navigate("/");
+        }, 2000);
+      } catch (err) {
+        if (err.message.includes("Invalid credentials")) {
+          setErrors((prev) => ({
+            ...prev,
+            password: "Invalid credentials",
+          }));
+        } else {
+          setToast({
+            message: err.message || "Login failed. Please try again.",
+            type: "error",
+          });
+        }
+      }
     }
   };
 
