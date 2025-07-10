@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class User {
+public class UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
@@ -18,6 +18,7 @@ public class User {
     @Column(unique = true)
     private String email;
 
+    @Column(unique = true)
     private String phoneNumber;
 
     private String password;
