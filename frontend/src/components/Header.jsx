@@ -1,8 +1,19 @@
 import { useContext, useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { CartContext } from "../context/CartContext";
 
 const Header = () => {
+  const navigate = useNavigate();
+  const [searchItem, setSearchItem] = useState("");
+
+  const handleChange = (e) => {
+    setSearchItem(e.target.value);
+  };
+
+  const handleSearch = () => {
+    navigate(`/products?search=${searchItem}`);
+  };
+
   const { cartItems } = useContext(CartContext);
   const cartCount = cartItems.reduce((sum, item) => sum + item.quantity, 0);
   return (
@@ -35,8 +46,13 @@ const Header = () => {
             type="text"
             placeholder="Search..."
             className="px-3 py-1 outline-none w-32 md:w-48"
+            value={searchItem}
+            onChange={handleChange}
           />
-          <button className="bg-blue-600 text-white px-3 py-1 hover:bg-blue-700">
+          <button
+            className="bg-blue-600 text-white px-3 py-1 hover:bg-blue-700"
+            onClick={handleSearch}
+          >
             <span className="material-symbols-outlined text-white">search</span>
           </button>
         </div>

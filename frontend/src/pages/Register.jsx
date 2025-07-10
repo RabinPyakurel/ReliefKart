@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Toast } from "../components";
 
-
 const Register = () => {
   const [formData, setFormData] = useState({
     fullName: "",
@@ -43,35 +42,49 @@ const Register = () => {
 
   const [toast, setToast] = useState({ message: "", type: "" });
   const navigate = useNavigate();
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (validate()) {
-      const users = JSON.parse(localStorage.getItem("users")) || [];
+      try {
+        const { fullName, email, phone, password } = formData;
 
-      // Check if the user already exists
-      const userExists = users.some((user) => user.email === formData.email);
-      if (userExists) {
-        setToast({ message: "Email already registered.", type: "error" });
-        return;
+        const response = await fetch("http://localhost:8080/user/register", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            full_name: fullName,
+            email,
+            phone_number: phone,
+            password,
+          }),
+        });
+
+        if (!response.ok) {
+          const errorText = await response.text();
+          throw new Error(errorText);
+        }
+
+        setToast({ message: "User registered successfully!", type: "success" });
+
+        setTimeout(() => {
+          setToast({ message: "", type: "" });
+          navigate("/login");
+        }, 2000);
+      } catch (err) {
+        if (err.message.includes("Email already")) {
+          setErrors((prev) => ({
+            ...prev,
+            email: "This email is already in use.",
+          }));
+        } else {
+          setToast({ message: err.message, type: "error" });
+        }
       }
-
-      // Save new user to localStorage
-      const { fullName, email, phone, password } = formData;
-      users.push({ fullName, email, phone, password });
-      localStorage.setItem("users", JSON.stringify(users));
-
-      // Show success message
-      setToast({ message: "User registered successfully!", type: "success" });
-
-      // Auto-hide the toast after 2 seconds and redirect to login
-      setTimeout(() => {
-        setToast({ message: "", type: "" });
-        navigate("/login");
-      }, 2000);
     }
   };
-
   return (
     <>
       {toast.message && <Toast message={toast.message} type={toast.type} />}
