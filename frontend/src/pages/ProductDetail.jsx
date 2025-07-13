@@ -1,11 +1,26 @@
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
+import Toast from "../components/Toast";
+import { CartContext } from "../context/CartContext";
 
 const ProductDetail = () => {
   const { id } = useParams();
   const [product, setProduct] = useState(null);
+  const { addToCart } = useContext(CartContext);
+  const [toast, setToast] = useState({ message: "", type: "" });
 
+  const handleAddToCart = (product) => {
+    addToCart(product);
+
+    setToast({ message: `${product.name} added to cart!`, type: "success" });
+
+    setTimeout(() => {
+      setToast({ message: "", type: "" });
+    }, 2000);
+  };
+
+  const navigate = useNavigate();
   useEffect(() => {
     axios
       .get(`http://localhost:8080/api/product/${id}`)
@@ -49,7 +64,29 @@ const ProductDetail = () => {
             <span className="text-red-600 font-semibold">Out of stock</span>
           )}
         </p>
+        <div className="flex gap-2 mt-auto">
+          <button
+            className="w-1/2 px-4 py-2 bg-blue-600 text-white text-sm rounded hover:bg-blue-700 transition"
+            onClick={() => handleAddToCart(product)}
+          >
+            Add to Cart
+          </button>
+          <button
+            className="w-1/2 px-4 py-2 bg-green-600 text-white text-sm rounded hover:bg-green-700 transition"
+            onClick={() =>
+              navigate("/esewa", {
+                state: {
+                  amount: product.price,
+                  name: product.name,
+                },
+              })
+            }
+          >
+            Buy Now
+          </button>
+        </div>
       </div>
+      {toast.message && <Toast message={toast.message} type={toast.type} />}
     </div>
   );
 };

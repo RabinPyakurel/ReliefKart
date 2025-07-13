@@ -51,6 +51,16 @@ const Login = () => {
 
         const data = await response.json();
 
+        const safeUser = {
+          id: data.id,
+          email: data.email,
+          name: data.fullName,
+          phone: data.phoneNumber,
+        };
+
+        localStorage.setItem("currentUser", JSON.stringify(safeUser));
+        window.dispatchEvent(new Event("user-logged-in"));
+
         setToast({ message: "Login successful!", type: "success" });
         setTimeout(() => {
           setToast({ message: "", type: "" });

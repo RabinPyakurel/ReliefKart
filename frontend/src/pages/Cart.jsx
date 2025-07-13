@@ -1,28 +1,45 @@
 import { useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { CartContext } from "../context/CartContext";
+
 const Cart = () => {
   const navigate = useNavigate();
-  const { cartItems, addToCart, removeFromCart, setCartItems } =
-    useContext(CartContext);
+  const {
+    cartItems,
+    addToCart,
+    removeFromCart,
+    setCartItems,
+    syncCartToBackend,
+  } = useContext(CartContext);
 
   const changeQuantity = (id, operation) => {
     const item = cartItems.find((i) => i.id === id);
     if (!item) return;
 
+    let updatedCart;
+
     if (operation === "increase") {
-      addToCart(item);
-    } else {
-      if (item.quantity <= 1) {
-        removeFromCart(id);
-      } else {
-        const updatedCart = cartItems.map((i) =>
-          i.id === id ? { ...i, quantity: i.quantity - 1 } : i
-        );
-        localStorage.setItem("cart", JSON.stringify(updatedCart));
-        setCartItems(updatedCart);
-      }
+      addToCart(item); // already syncs in useEffect
+      return;
     }
+
+    if (item.quantity <= 1) {
+      updatedCart = cartItems.filter((i) => i.id !== id);
+    } else {
+      updatedCart = cartItems.map((i) =>
+        i.id === id ? { ...i, quantity: i.quantity - 1 } : i
+      );
+    }
+
+    setCartItems(updatedCart);
+    syncCartToBackend(updatedCart);
+  };
+
+  const handleRemove = (id) => {
+    const updatedCart = cartItems.filter((item) => item.id !== id);
+    setCartItems(updatedCart);
+    syncCartToBackend(updatedCart);
+    removeFromCart(id); // optional if you also want to tell backend to delete specifically
   };
 
   const calculateTotal = () => {
@@ -33,12 +50,12 @@ const Cart = () => {
   };
 
   const handleCheckout = () => {
-    // const user = JSON.parse(localStorage.getItem("currentUser"));
-    // if (!user) {
-    //   navigate("/login");
-    // } else {
-    navigate("/checkout");
-    // }
+    const user = JSON.parse(localStorage.getItem("currentUser"));
+    if (!user) {
+      navigate("/login");
+    } else {
+      navigate("/checkout");
+    }
   };
 
   return (
@@ -71,7 +88,7 @@ const Cart = () => {
                       <h3 className="text-lg font-semibold text-gray-800">
                         {item.name}
                       </h3>
-                      <p className="text-gray-600">${item.price}</p>
+                      <p className="text-gray-600">Rs. {item.price}</p>
                     </div>
                   </div>
 
@@ -91,7 +108,7 @@ const Cart = () => {
                       +
                     </button>
                     <button
-                      onClick={() => removeFromCart(item.id)}
+                      onClick={() => handleRemove(item.id)}
                       className="text-red-600 hover:text-red-800"
                     >
                       Remove
