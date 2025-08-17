@@ -23,10 +23,19 @@ public class ProductController {
     }
 
     @GetMapping("/products")
-    public ResponseEntity<List<Product>> getProducts(){
-        return new ResponseEntity<>(service.getAllProducts(), HttpStatus.OK);
-    }
+    public ResponseEntity<List<Product>> getProducts(
+            @RequestParam(required = false) String category) {
 
+        List<Product> products;
+
+        if (category != null && !category.isEmpty()) {
+            products = service.getProductsByCategory(category);
+        } else {
+            products = service.getAllProducts();
+        }
+
+        return new ResponseEntity<>(products, HttpStatus.OK);
+    }
     @GetMapping("/product/{id}")
     public ResponseEntity<Product> getProduct(@PathVariable int id){
         Product product = service.getProductById(id);

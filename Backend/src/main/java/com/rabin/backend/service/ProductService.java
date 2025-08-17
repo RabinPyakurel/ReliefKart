@@ -27,6 +27,9 @@ public class ProductService {
         return repo.findById(id).orElse(null);
     }
 
+    public List<Product> getProductsByCategory(String category) {
+        return repo.findByCategoryIgnoreCase(category);
+    }
 
     public List<Product> searchProducts(String keyword) {
         return repo.searchProducts(keyword);
