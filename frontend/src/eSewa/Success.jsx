@@ -32,7 +32,7 @@ const Success = () => {
       <div style={styles.card}>
         <div style={styles.header}>
           <h2>eSewa Payment</h2>
-          <p style={styles.date}>🕒 {new Date().toLocaleString()}</p>
+          <p style={styles.date}>{new Date().toLocaleString()}</p>
           <span style={styles.success}>✓ Completed</span>
         </div>
 

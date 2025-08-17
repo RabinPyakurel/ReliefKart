@@ -1,5 +1,5 @@
-import { useContext, useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useContext, useState } from "react";
+import { NavLink, useNavigate } from "react-router-dom";
 import { CartContext } from "../context/CartContext";
 
 const Header = () => {
@@ -16,27 +16,56 @@ const Header = () => {
 
   const { cartItems } = useContext(CartContext);
   const cartCount = cartItems.reduce((sum, item) => sum + item.quantity, 0);
+
   return (
     <header className="bg-white shadow-md py-4 px-6 flex items-center justify-between">
       {/* Logo */}
-      <Link to="/" className="text-2xl font-bold text-blue-600">
+      <NavLink to="/" className="text-2xl font-bold text-blue-600">
         ReliefKart
-      </Link>
+      </NavLink>
 
       {/* Navigation Links */}
       <nav className="space-x-6 hidden md:flex">
-        <Link to="/" className="text-gray-700 hover:text-blue-600">
+        <NavLink
+          to="/"
+          className={({ isActive }) =>
+            isActive
+              ? "text-blue-600 border-b-2 border-blue-600 pb-1"
+              : "text-gray-700 hover:text-blue-600"
+          }
+        >
           Home
-        </Link>
-        <Link to="/products" className="text-gray-700 hover:text-blue-600">
+        </NavLink>
+        <NavLink
+          to="/products"
+          className={({ isActive }) =>
+            isActive
+              ? "text-blue-600 border-b-2 border-blue-600 pb-1"
+              : "text-gray-700 hover:text-blue-600"
+          }
+        >
           Products
-        </Link>
-        <Link to="/about" className="text-gray-700 hover:text-blue-600">
+        </NavLink>
+        <NavLink
+          to="/about"
+          className={({ isActive }) =>
+            isActive
+              ? "text-blue-600 border-b-2 border-blue-600 pb-1"
+              : "text-gray-700 hover:text-blue-600"
+          }
+        >
           About
-        </Link>
-        <Link to="/contact" className="text-gray-700 hover:text-blue-600">
+        </NavLink>
+        <NavLink
+          to="/contact"
+          className={({ isActive }) =>
+            isActive
+              ? "text-blue-600 border-b-2 border-blue-600 pb-1"
+              : "text-gray-700 hover:text-blue-600"
+          }
+        >
           Contact
-        </Link>
+        </NavLink>
       </nav>
 
       {/* Right Side: Search + Icons */}
@@ -57,22 +86,22 @@ const Header = () => {
           </button>
         </div>
 
-        <Link to="/cart" className="relative">
+        <NavLink to="/cart" className="relative">
           <span className="material-symbols-outlined cursor-pointer text-gray-700 hover:text-blue-600">
             shopping_cart
           </span>
           {cartCount > 0 && (
-            <span className="absolute -top-1/4  -right-1 bg-red-600 text-white text-xs rounded-full h-3 w-3 flex items-center justify-center">
+            <span className="absolute -top-1/4 -right-1 bg-red-600 text-white text-xs rounded-full h-3 w-3 flex items-center justify-center">
               {cartCount}
             </span>
           )}
-        </Link>
+        </NavLink>
 
-        <Link to="/account">
+        <NavLink to="/account">
           <span className="material-symbols-outlined cursor-pointer text-gray-700 hover:text-blue-600">
             account_circle
           </span>
-        </Link>
+        </NavLink>
       </div>
     </header>
   );
